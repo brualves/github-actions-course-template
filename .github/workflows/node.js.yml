@@ -18,13 +18,22 @@ jobs:
       run: |
         npm install 
         npm run build
+    - uses: actions/upload-artifact@master
+      with: 
+        name: webback artifacts
+        path: public/
   test:
     runs-on: ${{ matrix.os }}
+    needs: build
     strategy:
       matrix:
         node-version: [12.x, 14.x]
         os: [windows-latest, ubuntu-latest]
     steps:
+    - uses: actions/download-artifact@master
+      with: 
+        name: webback artifacts
+        path: public
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
